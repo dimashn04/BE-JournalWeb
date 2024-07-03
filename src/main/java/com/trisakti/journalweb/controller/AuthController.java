@@ -45,7 +45,7 @@ public class AuthController {
             userService.create(registerDto);
             return ResponseEntity.ok("User registered successfully!");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to register user!");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
 }
