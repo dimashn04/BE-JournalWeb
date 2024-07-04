@@ -75,10 +75,7 @@ public class UserServiceImpl implements UserService {
         } else {
             strRoles.forEach(role -> {
                 if (role.equals("admin")) {
-                    Role adminRole = null;
-                    adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
-                        .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                    roles.add(adminRole);
+                    throw new RuntimeException("You cannot register as an admin");
                 } else {
                     Role userRole = null;
                     userRole = roleRepository.findByName(ERole.ROLE_USER)
@@ -111,7 +108,8 @@ public class UserServiceImpl implements UserService {
         UserEntity user = userRepository.findByUsername(username)
             .orElseThrow(() -> new UsernameNotFoundException("Username not found"));
 
-        if (!data.getNewPassword().isEmpty() || data.getNewPassword() != null){
+        System.out.println("New PW: " + data.getNewPassword().isEmpty());
+        if (data.getNewPassword().isEmpty() == false && data.getNewPassword() != null){
             if (data.getOldPassword() == null || data.getOldPassword().isEmpty()) {
                 throw new IllegalArgumentException("Old password is required");
             }
@@ -123,27 +121,27 @@ public class UserServiceImpl implements UserService {
             user.setPassword(passwordEncoder.encode(data.getNewPassword()));
         }
 
-        if (!data.getGivenName().isEmpty() || data.getGivenName() != null){
+        if (data.getGivenName().isEmpty() == false && data.getGivenName() != null){
             user.setGivenName(data.getGivenName());
         }
 
-        if (!data.getFamilyName().isEmpty() || data.getFamilyName() != null){
+        if (data.getFamilyName().isEmpty() == false && data.getFamilyName() != null){
             user.setFamilyName(data.getFamilyName());
         }
 
-        if (!data.getAffiliation().isEmpty() || data.getAffiliation() != null){
+        if (data.getAffiliation().isEmpty() == false && data.getAffiliation() != null){
             user.setAffiliation(data.getAffiliation());
         }
 
-        if (!data.getCountry().isEmpty() || data.getCountry() != null){
+        if (data.getCountry().isEmpty() == false && data.getCountry() != null){
             user.setCountry(data.getCountry());
         }
 
-        if (!data.getPhoneNumber().isEmpty() || data.getPhoneNumber() != null){
+        if (data.getPhoneNumber().isEmpty() == false && data.getPhoneNumber() != null){
             user.setPhoneNumber(data.getPhoneNumber());
         }
 
-        if (!data.getFullName().isEmpty() || data.getFullName() != null){
+        if (data.getFullName().isEmpty() == false && data.getFullName() != null){
             user.setFullName(data.getFullName());
         }
 
@@ -176,6 +174,7 @@ public class UserServiceImpl implements UserService {
         userDto.setEmail(user.getEmail());
         userDto.setGivenName(user.getGivenName());
         userDto.setFamilyName(user.getFamilyName());
+        userDto.setFullName(user.getFullName());
         userDto.setAffiliation(user.getAffiliation());
         userDto.setCountry(user.getCountry());
         userDto.setPhoneNumber(user.getPhoneNumber());
